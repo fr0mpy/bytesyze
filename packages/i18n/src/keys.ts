@@ -68,3 +68,48 @@ export const error = {
   tryAgain: 'error.tryAgain',
   goHome: 'error.goHome',
 } as const
+
+// Card keys
+export const card = {
+  source: 'card.source',
+  readMore: 'card.readMore',
+  keyPoints: 'card.keyPoints',
+  publishedAt: 'card.publishedAt',
+  category: 'card.category',
+} as const
+
+// Feed keys
+export const feed = {
+  title: 'feed.title',
+  empty: 'feed.empty',
+  loading: 'feed.loading',
+  error: 'feed.error',
+  stale: 'feed.stale',
+  refresh: 'feed.refresh',
+} as const
+
+// Share keys
+export const share = {
+  button: 'share.button',
+  copied: 'share.copied',
+  shareOn: 'share.shareOn',
+  copyLink: 'share.copyLink',
+} as const
+
+// Flag keys
+export const flag = {
+  button: 'flag.button',
+  confirm: 'flag.confirm',
+  thanks: 'flag.thanks',
+} as const
+
+// Admin keys
+export const admin = {
+  title: 'admin.title',
+  dashboard: 'admin.dashboard',
+  flagged: 'admin.flagged',
+  sources: 'admin.sources',
+  totalCards: 'admin.totalCards',
+  totalViews: 'admin.totalViews',
+  totalShares: 'admin.totalShares',
+} as const

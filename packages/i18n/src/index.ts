@@ -6,4 +6,5 @@ export { getWebMessages } from './messages'
 export {
   brand, navigation, aria, labels, placeholder, srOnly, settings,
   metadata, mobileWarning, error,
+  card, feed, share, flag, admin,
 } from './keys'

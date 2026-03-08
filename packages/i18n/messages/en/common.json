@@ -58,5 +58,40 @@
     "description": "An unexpected error occurred. Please try again.",
     "tryAgain": "Try again",
     "goHome": "Go to homepage"
+  },
+  "card": {
+    "source": "Source",
+    "readMore": "Read Full Article",
+    "keyPoints": "Key Points",
+    "publishedAt": "Published {time}",
+    "category": "Category"
+  },
+  "feed": {
+    "title": "AI News Feed",
+    "empty": "No cards available right now. Check back soon.",
+    "loading": "Loading cards...",
+    "error": "Failed to load cards. Please try again.",
+    "stale": "Latest news from {hours} hours ago.",
+    "refresh": "Refresh"
+  },
+  "share": {
+    "button": "Share",
+    "copied": "Link copied!",
+    "shareOn": "Share on {platform}",
+    "copyLink": "Copy link"
+  },
+  "flag": {
+    "button": "Flag",
+    "confirm": "Flag this card for review?",
+    "thanks": "Thanks, we will review this."
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "dashboard": "Dashboard",
+    "flagged": "Flagged Cards",
+    "sources": "Sources",
+    "totalCards": "Total Cards",
+    "totalViews": "Total Views",
+    "totalShares": "Total Shares"
   }
 }

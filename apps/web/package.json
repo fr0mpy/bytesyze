@@ -16,12 +16,14 @@
     "@bytesyze/i18n": "workspace:*",
     "@bytesyze/utils": "workspace:*",
     "@tanstack/react-virtual": "^3.13.18",
+    "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.564.0",
     "motion": "^12.34.0",
     "next": "^15.0.0",
     "next-intl": "^3.26.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "recharts": "^3.8.0"
   },
   "devDependencies": {
     "@bytesyze/eslint-config": "workspace:*",
