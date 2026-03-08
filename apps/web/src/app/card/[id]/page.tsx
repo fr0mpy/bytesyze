@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { NewsCard } from '@/components/card'
 import { getCardById } from '@/lib/data/cards'
 
 export default async function CardPage({
@@ -17,7 +18,7 @@ export default async function CardPage({
 
   return (
     <main className="flex flex-col items-center p-4">
-      <h1 className="text-2xl font-bold">{card.title}</h1>
+      <NewsCard card={card} expanded />
     </main>
   )
 }
