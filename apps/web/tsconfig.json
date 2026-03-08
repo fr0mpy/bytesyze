@@ -1,0 +1,33 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*",
+        "../../packages/ui-library/core/src/*"
+      ],
+      "@harness/*": [
+        "../../packages/ui-library/harness/src/*"
+      ]
+    },
+    "baseUrl": ".",
+    "incremental": true,
+    "allowJs": true,
+    "noEmit": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

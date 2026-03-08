@@ -1,0 +1,23 @@
+{
+  "name": "@bytesyze/utils",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./logger": "./src/logger/index.ts",
+    "./storage": "./src/storage/index.ts",
+    "./formatters": "./src/formatters/index.ts",
+    "./speculation-rules": "./src/speculation-rules/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@bytesyze/eslint-config": "workspace:*",
+    "typescript": "^5.0.0"
+  }
+}

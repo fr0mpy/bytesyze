@@ -1,0 +1,83 @@
+/**
+ * Base Theme CSS Variables
+ *
+ * Auto-generated from: packages/ui-library/core/src/theming/input/base-theme.ts
+ * Generated at: 2026-02-25T21:18:16.885Z
+ *
+ * DO NOT EDIT DIRECTLY — edit the TypeScript source and run:
+ * pnpm --filter @bytesyze-ui/core build:theme-css
+ */
+
+:root {
+  /* Spacing */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+
+  /* Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+
+  /* Motion */
+  --motion-duration-fast: 150ms;
+  --motion-duration-normal: 200ms;
+  --motion-duration-slow: 300ms;
+  --motion-duration-spinner: 3s;
+  --motion-spring-stiffness: 300;
+  --motion-spring-damping: 30;
+  --motion-spring-stiffness-bouncy: 400;
+
+  /* Z-Index */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal: 300;
+  --z-popover: 400;
+  --z-tooltip: 600;
+  --z-toast: 9900;
+
+  /* Shadows (Light Mode) */
+  --shadow-raised: -6px -6px 14px rgba(255, 255, 255, 0.88), 6px 6px 14px rgba(175, 175, 175, 0.52);
+  --shadow-raised-sm: -3px -3px 8px rgba(255, 255, 255, 0.88), 3px 3px 8px rgba(175, 175, 175, 0.52);
+  --shadow-raised-lg: -8px -8px 20px rgba(255, 255, 255, 0.9), 8px 8px 20px rgba(175, 175, 175, 0.58);
+  --shadow-pressed: inset -4px -4px 8px rgba(255, 255, 255, 0.88), inset 4px 4px 8px rgba(175, 175, 175, 0.52);
+  --shadow-pressed-sm: inset -2px -2px 5px rgba(255, 255, 255, 0.75), inset 2px 2px 5px rgba(175, 175, 175, 0.44);
+  --shadow-flat: inset 1px 1px 2px rgba(175, 175, 175, 0.32), inset -1px -1px 2px rgba(255, 255, 255, 0.55);
+  --shadow-focus: 0 0 0 3px rgba(0, 175, 102, 0.6);
+  --shadow-inset-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  --shadow-variant-primary: inset 0 1px 0 rgba(255, 255, 255, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.3), 4px 4px 10px rgba(0, 100, 60, 0.3);
+  --shadow-variant-secondary: inset 0 1px 0 rgba(255, 255, 255, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.3), 4px 4px 10px rgba(60, 60, 140, 0.3);
+  --shadow-variant-destructive: inset 0 1px 0 rgba(255, 255, 255, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.3), 4px 4px 10px rgba(180, 40, 40, 0.3);
+  --shadow-variant-success: inset 0 1px 0 rgba(255, 255, 255, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.3), 4px 4px 10px rgba(0, 100, 60, 0.2);
+  --shadow-variant-warning: inset 0 1px 0 rgba(255, 255, 255, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.3), 4px 4px 10px rgba(180, 80, 0, 0.2);
+  --shadow-control-unchecked: inset -2px -2px 4px rgba(255, 255, 255, 0.7), inset 2px 2px 5px rgba(0, 60, 40, 0.35);
+  --shadow-control-checked: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 2px 2px 5px rgba(0, 80, 50, 0.35);
+}
+
+.dark {
+  /* Shadows (Dark Mode) */
+  --shadow-raised: -6px -6px 14px rgba(255, 255, 255, 0.06), 6px 6px 14px rgba(0, 0, 0, 0.5);
+  --shadow-raised-sm: -3px -3px 8px rgba(255, 255, 255, 0.06), 3px 3px 8px rgba(0, 0, 0, 0.5);
+  --shadow-raised-lg: -8px -8px 20px rgba(255, 255, 255, 0.07), 8px 8px 20px rgba(0, 0, 0, 0.55);
+  --shadow-pressed: inset -4px -4px 8px rgba(255, 255, 255, 0.06), inset 4px 4px 8px rgba(0, 0, 0, 0.5);
+  --shadow-pressed-sm: inset -2px -2px 5px rgba(255, 255, 255, 0.04), inset 2px 2px 5px rgba(0, 0, 0, 0.35);
+  --shadow-flat: inset 1px 1px 2px rgba(0, 0, 0, 0.25), inset -1px -1px 2px rgba(255, 255, 255, 0.04);
+  --shadow-focus: 0 0 0 3px rgba(0, 175, 102, 0.6);
+  --shadow-inset-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-variant-primary: inset 0 1px 0 rgba(255, 255, 255, 0.1), -3px -3px 8px rgba(255, 255, 255, 0.1), 3px 3px 8px rgba(0, 0, 0, 0.4);
+  --shadow-variant-secondary: inset 0 1px 0 rgba(255, 255, 255, 0.1), -3px -3px 8px rgba(255, 255, 255, 0.1), 3px 3px 8px rgba(0, 0, 0, 0.4);
+  --shadow-variant-destructive: inset 0 1px 0 rgba(255, 255, 255, 0.1), -3px -3px 8px rgba(255, 255, 255, 0.1), 3px 3px 8px rgba(0, 0, 0, 0.4);
+  --shadow-variant-success: inset 0 1px 0 rgba(255, 255, 255, 0.1), -3px -3px 8px rgba(255, 255, 255, 0.1), 3px 3px 8px rgba(0, 0, 0, 0.4);
+  --shadow-variant-warning: inset 0 1px 0 rgba(255, 255, 255, 0.1), -3px -3px 8px rgba(255, 255, 255, 0.1), 3px 3px 8px rgba(0, 0, 0, 0.4);
+  --shadow-control-unchecked: inset -2px -2px 4px rgba(255, 255, 255, 0.08), inset 2px 2px 5px rgba(0, 0, 0, 0.45);
+  --shadow-control-checked: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 2px 2px 5px rgba(0, 0, 0, 0.4);
+}

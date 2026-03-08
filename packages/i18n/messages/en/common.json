@@ -1,0 +1,62 @@
+{
+  "brand": {
+    "name": "Bytesyze"
+  },
+  "navigation": {
+    "home": "Home",
+    "settings": "Settings",
+    "theme": "Theme"
+  },
+  "aria": {
+    "close": "Close",
+    "loading": "Loading...",
+    "search": "Search",
+    "settings": "Settings",
+    "filterByType": "Filter by type",
+    "filterInput": "Filter",
+    "morePages": "More pages",
+    "previousPage": "Go to previous page",
+    "nextPage": "Go to next page",
+    "breadcrumb": "breadcrumb",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode",
+    "pagination": "pagination",
+    "selectLanguage": "Select language",
+    "mainNavigation": "Main navigation",
+    "goToHomepage": "Go to homepage",
+    "openNavigationMenu": "Open navigation menu"
+  },
+  "labels": {
+    "previous": "Previous",
+    "next": "Next",
+    "loading": "Loading"
+  },
+  "placeholder": {
+    "search": "Search...",
+    "select": "Select..."
+  },
+  "srOnly": {
+    "loading": "Loading...",
+    "close": "Close",
+    "morePages": "More pages"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language"
+  },
+  "metadata": {
+    "title": "Bytesyze",
+    "description": "Bytesyze application"
+  },
+  "mobileWarning": {
+    "title": "Desktop Experience Recommended",
+    "description": "This application is optimised for desktop. Some features may not work as expected on mobile devices.",
+    "dismiss": "Got it"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "tryAgain": "Try again",
+    "goHome": "Go to homepage"
+  }
+}

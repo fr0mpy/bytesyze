@@ -1,0 +1,1 @@
+export { setStorageString } from './storage'

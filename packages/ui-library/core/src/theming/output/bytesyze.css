@@ -1,0 +1,94 @@
+/**
+ * Bytesyze Green Theme
+ *
+ * Auto-generated from: packages/ui-library/core/src/theming/input/bytesyze.ts
+ * Generated at: 2026-02-25T21:18:16.888Z
+ *
+ * DO NOT EDIT DIRECTLY — edit the TypeScript source and run:
+ * pnpm --filter @bytesyze-ui/core build:theme-css
+ */
+
+:root {
+  --color-primary: #00af66;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #008a52;
+  --color-secondary: #6366f1;
+  --color-secondary-foreground: #ffffff;
+  --color-secondary-hover: #4338ca;
+  --color-background: #f4f4f4;
+  --color-foreground: #222222;
+  --color-surface: #f4f4f4;
+  --color-muted: #e9e9e9;
+  --color-muted-foreground: #6b7280;
+  --color-border: #dedede;
+  --color-destructive: #ef3737;
+  --color-destructive-foreground: #ffffff;
+  --color-destructive-hover: #b91c1c;
+  --color-accent: #6366f1;
+  --color-accent-foreground: #ffffff;
+  --color-success: #00af66;
+  --color-success-foreground: #ffffff;
+  --color-warning: #ff6900;
+  --color-warning-foreground: #ffffff;
+  --color-info: #3b82f6;
+  --color-info-foreground: #ffffff;
+  --color-neu-base: #f4f4f4;
+  --color-neu-light: rgba(255, 255, 255, 0.88);
+  --color-neu-dark: rgba(175, 175, 175, 0.52);
+  --color-spinner-front: #00af66;
+  --color-spinner-back: #00935a;
+  --color-spinner-light: #dedede;
+  --color-spinner-lighter: #ebebeb;
+  --color-spinner-dark: #404040;
+  --color-spinner-darker: #525252;
+  --color-ai: #8B5CF6;
+  --color-ai-foreground: #ffffff;
+  --color-ai-hover: #7C3AED;
+  --color-ai-from: #8B5CF6;
+  --color-ai-to: #6366F1;
+
+  /* Typography */
+  --font-heading: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-code: var(--font-mono), ui-monospace, monospace;
+}
+
+.dark {
+  --color-primary: #00af66;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #00c974;
+  --color-secondary: #6366f1;
+  --color-secondary-foreground: #ffffff;
+  --color-secondary-hover: #818cf8;
+  --color-background: #212121;
+  --color-foreground: #f5f5f5;
+  --color-surface: #212121;
+  --color-muted: #3a3a3a;
+  --color-muted-foreground: #9e9e9e;
+  --color-border: #000000;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-destructive-hover: #f87171;
+  --color-accent: #818cf8;
+  --color-accent-foreground: #ffffff;
+  --color-success: #22c55e;
+  --color-success-foreground: #ffffff;
+  --color-warning: #f97316;
+  --color-warning-foreground: #ffffff;
+  --color-info: #60a5fa;
+  --color-info-foreground: #ffffff;
+  --color-neu-base: #212121;
+  --color-neu-light: rgba(255, 255, 255, 0.06);
+  --color-neu-dark: rgba(0, 0, 0, 0.5);
+  --color-spinner-front: #00af66;
+  --color-spinner-back: #00b368;
+  --color-spinner-light: #3a3a3a;
+  --color-spinner-lighter: #4a4a4a;
+  --color-spinner-dark: #e0e0e0;
+  --color-spinner-darker: #c0c0c0;
+  --color-ai: #A78BFA;
+  --color-ai-foreground: #ffffff;
+  --color-ai-hover: #C4B5FD;
+  --color-ai-from: #A78BFA;
+  --color-ai-to: #818CF8;
+}

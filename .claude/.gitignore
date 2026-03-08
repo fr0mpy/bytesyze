@@ -1,0 +1,6 @@
+# Generated files
+CONTEXT.md
+.cache/
+
+# Secrets
+.env

@@ -1,0 +1,89 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "clean:ports",
+      "detail": "Kill processes on ports 3000, 5173",
+      "type": "shell",
+      "command": "pnpm clean:ports",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "dev",
+      "detail": "Run all dev servers",
+      "type": "shell",
+      "command": "pnpm dev",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "dev:web",
+      "detail": "http://localhost:3000 - Web app",
+      "type": "shell",
+      "command": "pnpm dev:web",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "dev:harness",
+      "detail": "http://localhost:5173 - Component gallery",
+      "type": "shell",
+      "command": "pnpm dev:harness",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "build",
+      "detail": "Build all packages for production",
+      "type": "shell",
+      "command": "pnpm build",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "build:theme-css",
+      "detail": "Generate base.css and brand CSS from TypeScript",
+      "type": "shell",
+      "command": "pnpm --filter @bytesyze-ui/core build:theme-css",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "analyze:web",
+      "detail": "Bundle analysis for Web app",
+      "type": "shell",
+      "command": "pnpm --filter @bytesyze/web build:analyze",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": ["$tsc"]
+    }
+  ]
+}

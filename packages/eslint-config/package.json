@@ -1,0 +1,31 @@
+{
+  "name": "@bytesyze/eslint-config",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./base": "./configs/base.js",
+    "./typescript": "./configs/typescript.js",
+    "./react": "./configs/react.js",
+    "./jsx-a11y": "./configs/jsx-a11y.js",
+    "./imports": "./configs/imports.js",
+    "./next": "./configs/next.js",
+    "./formatting": "./configs/formatting.js"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@eslint/js": "^9.0.0",
+    "@next/eslint-plugin-next": "^15.0.0",
+    "@stylistic/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint-plugin-import-x": "^4.0.0",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.0.0"
+  }
+}

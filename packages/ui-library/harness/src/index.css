@@ -1,0 +1,33 @@
+/* Lenis smooth scroll styles */
+@import 'lenis/dist/lenis.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Performance: Replaced universal * selector with specific elements
+   * The universal selector was applying border-border to every DOM element
+   */
+  html {
+    @apply bg-background text-foreground;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Apply border color only to elements that commonly use borders */
+  input,
+  textarea,
+  select,
+  button,
+  [role="separator"],
+  hr,
+  table,
+  th,
+  td {
+    @apply border-border;
+  }
+}

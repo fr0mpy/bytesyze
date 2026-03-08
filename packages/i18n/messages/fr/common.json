@@ -1,0 +1,62 @@
+{
+  "brand": {
+    "name": "Bytesyze"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "settings": "Paramètres",
+    "theme": "Thème"
+  },
+  "aria": {
+    "close": "Fermer",
+    "loading": "Chargement...",
+    "search": "Rechercher",
+    "settings": "Paramètres",
+    "filterByType": "Filtrer par type",
+    "filterInput": "Filtrer",
+    "morePages": "Plus de pages",
+    "previousPage": "Aller à la page précédente",
+    "nextPage": "Aller à la page suivante",
+    "breadcrumb": "fil d'Ariane",
+    "switchToLight": "Passer en mode clair",
+    "switchToDark": "Passer en mode sombre",
+    "pagination": "pagination",
+    "selectLanguage": "Sélectionner la langue",
+    "mainNavigation": "Navigation principale",
+    "goToHomepage": "Aller à la page d'accueil",
+    "openNavigationMenu": "Ouvrir le menu de navigation"
+  },
+  "labels": {
+    "previous": "Précédent",
+    "next": "Suivant",
+    "loading": "Chargement"
+  },
+  "placeholder": {
+    "search": "Rechercher...",
+    "select": "Sélectionner..."
+  },
+  "srOnly": {
+    "loading": "Chargement...",
+    "close": "Fermer",
+    "morePages": "Plus de pages"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue"
+  },
+  "metadata": {
+    "title": "Bytesyze",
+    "description": "Application Bytesyze"
+  },
+  "mobileWarning": {
+    "title": "Expérience de bureau recommandée",
+    "description": "Cette application est optimisée pour le bureau. Certaines fonctionnalités peuvent ne pas fonctionner comme prévu sur les appareils mobiles.",
+    "dismiss": "Compris"
+  },
+  "error": {
+    "title": "Une erreur s'est produite",
+    "description": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "tryAgain": "Réessayer",
+    "goHome": "Aller à la page d'accueil"
+  }
+}

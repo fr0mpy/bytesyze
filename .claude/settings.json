@@ -1,0 +1,55 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "Grep",
+      "Glob",
+      "WebFetch"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/session-start.sh",
+            "statusMessage": "Loading project context..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/prompt-cache.sh",
+            "statusMessage": "Checking context cache..."
+          }
+        ]
+      },
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "agent",
+            "model": "haiku",
+            "prompt": "You are a context classifier. Analyze the user's prompt semantically and load relevant project rules.\n\nUser prompt: $ARGUMENTS\n\n## Instructions\n\n1. Read .claude/hooks/.prompt-state. If the number % 3 != 0, output nothing and exit (cache: classify every 3rd prompt only).\n\n2. Read .claude/CLAUDE.md to see the available rules, skills, and agents.\n\n3. SEMANTICALLY analyze what the user is trying to do. Do NOT match keywords literally - understand intent:\n   - \"switch between pages\" → routing\n   - \"make it look good on mobile\" → accessibility, components\n   - \"it's slow\" → performance\n   - \"add a button\" → components, pre-code-check agent\n   - \"deploy\" or \"ship\" → bundle, git\n\n4. If the prompt is conversational (greetings, thanks, clarifying questions), output nothing.\n\n5. For each relevant RULE (max 3), Read .claude/rules/{name}.md and output full content.\n\n6. For each relevant SKILL (max 2), Read .claude/skills/{name}.md and output full content.\n\n7. List relevant agents (PRE-work and POST-work) by name only.\n\n## Output Format\n\n<context>\n## Rules\n<rule name=\"routing\">\n[content]\n</rule>\n\n## Skills\n<skill name=\"react-patterns\">\n[content]\n</skill>\n\n## Agents\n- PRE: pre-code-check\n- POST: component-auditor\n</context>",
+            "timeout": 30,
+            "statusMessage": "Classifying prompt..."
+          }
+        ]
+      }
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  }
+}
