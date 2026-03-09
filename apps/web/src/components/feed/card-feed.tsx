@@ -40,14 +40,21 @@ export function CardFeed({ initialCards, initialNextCursor: _initialNextCursor }
     emblaApi?.scrollNext()
   }, [emblaApi])
 
-  const allStale = useMemo(() => {
-    if (initialCards.length === 0) return false
+  const staleHours = useMemo(() => {
+    if (initialCards.length === 0) return 0
     const now = Date.now()
-    return initialCards.every((c) => {
+    const isAllStale = initialCards.every((c) => {
       const publishedDate = c.published_at ?? c.created_at
       return now - new Date(publishedDate).getTime() > STALE_THRESHOLD_MS
     })
+    if (!isAllStale) return 0
+    const newest = Math.max(
+      ...initialCards.map((c) => new Date(c.published_at ?? c.created_at).getTime()),
+    )
+    return Math.floor((now - newest) / 3_600_000)
   }, [initialCards])
+
+  const allStale = staleHours > 0
 
   const handleRefresh = useCallback(() => {
     window.location.reload()
@@ -65,7 +72,7 @@ export function CardFeed({ initialCards, initialNextCursor: _initialNextCursor }
     <div className={S.container}>
       {allStale && (
         <div className={S.staleBanner} role="status">
-          <span>{t(feed.stale)}</span>
+          <span>{t(feed.stale, { hours: staleHours })}</span>
           <button
             type="button"
             className={S.staleRefreshButton}
