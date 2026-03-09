@@ -5,6 +5,7 @@ import { Button } from '@bytesyze-ui/core/button'
 import { Text } from '@bytesyze-ui/core/text'
 import { useTranslations } from '@bytesyze/i18n'
 import { error as errorKeys } from '@bytesyze/i18n'
+import { RootErrorStyles as S } from './error-styles'
 
 export default function Error({
   error,
@@ -20,12 +21,9 @@ export default function Error({
   }, [error])
 
   return (
-    <div
-      role="alert"
-      className="flex flex-col items-center justify-center min-h-[50vh] gap-4 p-8"
-    >
+    <div role="alert" className={S.container}>
       <Text variant="h2">{t(errorKeys.title)}</Text>
-      <Text variant="body1" className="text-muted-foreground text-center max-w-md">
+      <Text variant="body1" className={S.description}>
         {t(errorKeys.description)}
       </Text>
       <Button onClick={reset} variant="primary">

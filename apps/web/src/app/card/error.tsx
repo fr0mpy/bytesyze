@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react'
 import { useTranslations, error as errorKeys } from '@bytesyze/i18n'
-import { CardErrorStyles as S } from '../error-styles'
+import { CardErrorStyles as S } from './error-styles'
 
-export default function CardDetailError({
+export default function CardError({
   error,
   reset,
 }: {

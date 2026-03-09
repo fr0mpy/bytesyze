@@ -9,9 +9,11 @@ export async function GET(
 ) {
   const { id } = await params
 
-  if (!id || id.length === 0) {
+  const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+  if (!id || !UUID_REGEX.test(id)) {
     return NextResponse.json(
-      { error: 'id parameter is required' },
+      { error: 'Valid UUID id parameter is required' },
       { status: 400 },
     )
   }

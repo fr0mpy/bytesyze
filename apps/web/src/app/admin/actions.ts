@@ -37,7 +37,7 @@ export async function isAdminAuthenticated(): Promise<boolean> {
   const adminPassword = process.env.ADMIN_PASSWORD
 
   if (!adminPassword) {
-    return true
+    return false
   }
 
   const cookieStore = await cookies()

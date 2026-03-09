@@ -12,8 +12,10 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const id = searchParams.get('id')
 
-  if (!id) {
-    return new Response('Missing id parameter', { status: 400 })
+  const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+  if (!id || !UUID_REGEX.test(id)) {
+    return new Response('Valid UUID id parameter is required', { status: 400 })
   }
 
   const result = await getCardById(id)
