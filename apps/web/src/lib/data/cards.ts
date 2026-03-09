@@ -1,4 +1,4 @@
-import { mockCards } from '@/lib/mocks/cards'
+import { createAnonClient } from '@/lib/supabase/client'
 import type { Card, CardCategory } from '@/lib/supabase/types'
 
 interface GetCardsOptions {
@@ -7,9 +7,12 @@ interface GetCardsOptions {
   category?: CardCategory
 }
 
+type FreshnessStatus = 'fresh' | 'ok' | 'stale'
+
 interface GetCardsResult {
   cards: Card[]
   nextCursor: string | null
+  freshness_status: FreshnessStatus
 }
 
 interface GetCardByIdResult {
@@ -18,66 +21,131 @@ interface GetCardByIdResult {
   nextId: string | null
 }
 
+const FRESH_THRESHOLD_MS = 2 * 60 * 60 * 1000 // 2 hours
+const STALE_THRESHOLD_MS = 6 * 60 * 60 * 1000 // 6 hours
+
+function computeFreshness(newestPublishedAt: string | null): FreshnessStatus {
+  if (!newestPublishedAt) return 'stale'
+
+  const ageMs = Date.now() - new Date(newestPublishedAt).getTime()
+
+  if (ageMs < FRESH_THRESHOLD_MS) return 'fresh'
+  if (ageMs > STALE_THRESHOLD_MS) return 'stale'
+  return 'ok'
+}
+
 /**
- * Fetches a paginated list of published cards.
- * Currently backed by mock data; will be replaced with Supabase queries.
+ * Fetches a paginated list of published cards from Supabase.
+ * Uses keyset pagination on published_at for stable ordering.
  */
 export async function getCards(options?: GetCardsOptions): Promise<GetCardsResult> {
   const limit = options?.limit ?? 20
   const cursor = options?.cursor
   const category = options?.category
 
-  let cards = mockCards.filter((c) => c.status === 'published')
+  const supabase = createAnonClient()
+
+  // If cursor is provided, look up the cursor card's published_at for keyset pagination
+  let cursorPublishedAt: string | null = null
+  if (cursor) {
+    const { data: cursorCard } = await supabase
+      .from('cards')
+      .select('published_at')
+      .eq('id', cursor)
+      .single()
+
+    cursorPublishedAt = cursorCard?.published_at ?? null
+  }
+
+  // Build query: published cards ordered by published_at DESC
+  let query = supabase
+    .from('cards')
+    .select('*')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(limit + 1) // Fetch one extra to detect next page
 
   if (category) {
-    cards = cards.filter((c) => c.category === category)
+    query = query.eq('category', category)
   }
 
-  // Sort by published_at descending (newest first)
-  cards.sort((a, b) => {
-    const dateA = a.published_at ?? a.created_at
-    const dateB = b.published_at ?? b.created_at
-    return new Date(dateB).getTime() - new Date(dateA).getTime()
-  })
-
-  // Apply cursor-based pagination
-  let startIndex = 0
-  if (cursor) {
-    const cursorIndex = cards.findIndex((c) => c.id === cursor)
-    if (cursorIndex !== -1) {
-      startIndex = cursorIndex + 1
-    }
+  if (cursorPublishedAt) {
+    query = query.lt('published_at', cursorPublishedAt)
   }
 
-  const page = cards.slice(startIndex, startIndex + limit)
-  const hasMore = startIndex + limit < cards.length
+  const { data, error } = await query
+
+  if (error) {
+    throw new Error(`Failed to fetch cards: ${error.message}`)
+  }
+
+  const cards = data as Card[]
+  const hasMore = cards.length > limit
+  const page = hasMore ? cards.slice(0, limit) : cards
   const nextCursor = hasMore ? page[page.length - 1]?.id ?? null : null
 
-  return { cards: page, nextCursor }
+  // Determine freshness from the newest card in the full dataset (first page, no cursor)
+  let freshness_status: FreshnessStatus
+  if (!cursor && page.length > 0) {
+    freshness_status = computeFreshness(page[0].published_at)
+  } else {
+    // For paginated requests, fetch the newest card's published_at
+    const { data: newest } = await supabase
+      .from('cards')
+      .select('published_at')
+      .eq('status', 'published')
+      .order('published_at', { ascending: false })
+      .limit(1)
+      .single()
+
+    freshness_status = computeFreshness(newest?.published_at ?? null)
+  }
+
+  return { cards: page, nextCursor, freshness_status }
 }
 
 /**
  * Fetches a single card by ID with prev/next IDs for swipe navigation.
- * Currently backed by mock data; will be replaced with Supabase queries.
  */
 export async function getCardById(id: string): Promise<GetCardByIdResult | null> {
-  const published = mockCards
-    .filter((c) => c.status === 'published')
-    .sort((a, b) => {
-      const dateA = a.published_at ?? a.created_at
-      const dateB = b.published_at ?? b.created_at
-      return new Date(dateB).getTime() - new Date(dateA).getTime()
-    })
+  const supabase = createAnonClient()
 
-  const index = published.findIndex((c) => c.id === id)
+  // Fetch the card
+  const { data: card, error } = await supabase
+    .from('cards')
+    .select('*')
+    .eq('id', id)
+    .eq('status', 'published')
+    .single()
 
-  if (index === -1) {
+  if (error || !card) {
     return null
   }
 
-  const card = published[index]
-  const prevId = index > 0 ? published[index - 1].id : null
-  const nextId = index < published.length - 1 ? published[index + 1].id : null
+  // Fetch prev (newer) and next (older) in parallel
+  const [prevResult, nextResult] = await Promise.all([
+    // Prev = next newer card (published_at > current, order ASC, limit 1)
+    supabase
+      .from('cards')
+      .select('id')
+      .eq('status', 'published')
+      .gt('published_at', card.published_at)
+      .order('published_at', { ascending: true })
+      .limit(1)
+      .single(),
+    // Next = next older card (published_at < current, order DESC, limit 1)
+    supabase
+      .from('cards')
+      .select('id')
+      .eq('status', 'published')
+      .lt('published_at', card.published_at)
+      .order('published_at', { ascending: false })
+      .limit(1)
+      .single(),
+  ])
 
-  return { card, prevId, nextId }
+  const prevId = prevResult.data?.id ?? null
+  const nextId = nextResult.data?.id ?? null
+
+  return { card: card as Card, prevId, nextId }
 }

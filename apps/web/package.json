@@ -14,7 +14,9 @@
   "dependencies": {
     "@bytesyze-ui/core": "workspace:*",
     "@bytesyze/i18n": "workspace:*",
+    "@bytesyze/pipeline": "workspace:^",
     "@bytesyze/utils": "workspace:*",
+    "@supabase/supabase-js": "^2.99.0",
     "@tanstack/react-virtual": "^3.13.18",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.564.0",
@@ -23,7 +25,8 @@
     "next-intl": "^3.26.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "recharts": "^3.8.0"
+    "recharts": "^3.8.0",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@bytesyze/eslint-config": "workspace:*",

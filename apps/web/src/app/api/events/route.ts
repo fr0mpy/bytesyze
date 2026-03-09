@@ -1,6 +1,11 @@
+import { after } from 'next/server'
+import { createAnonClient } from '@/lib/supabase/client'
 import type { EventType } from '@/lib/supabase/types'
 
 export const runtime = 'edge'
+
+/** UUID v4 format validation */
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 const VALID_EVENT_TYPES: ReadonlySet<string> = new Set<EventType>([
   'view',
@@ -20,7 +25,7 @@ function isValidPayload(body: unknown): body is EventPayload {
 
   const obj = body as Record<string, unknown>
 
-  if (typeof obj.cardId !== 'string' || obj.cardId.length === 0) return false
+  if (typeof obj.cardId !== 'string' || !UUID_PATTERN.test(obj.cardId)) return false
   if (typeof obj.eventType !== 'string' || !VALID_EVENT_TYPES.has(obj.eventType)) return false
 
   if (obj.metadata !== undefined) {
@@ -52,13 +57,15 @@ export async function POST(request: Request) {
     )
   }
 
-  // Log the event (no DB yet)
-  // eslint-disable-next-line no-console
-  console.log('[event]', {
-    cardId: body.cardId,
-    eventType: body.eventType,
-    metadata: body.metadata,
-    timestamp: new Date().toISOString(),
+  after(async () => {
+    const supabase = createAnonClient()
+    const { error } = await supabase.from('card_events').insert({
+      card_id: body.cardId,
+      event_type: body.eventType,
+    })
+    if (error) {
+      console.error('[event] Insert failed:', error.message)
+    }
   })
 
   return new Response(null, { status: 204 })
