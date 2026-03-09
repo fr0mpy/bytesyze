@@ -19,13 +19,28 @@ export type VisualType = 'bar' | 'line' | 'vs' | 'stat'
 
 export type CardStatus = 'draft' | 'published' | 'archived' | 'clustered'
 
-/** Raw article as extracted from an RSS feed */
+/** Source types for multi-source pipeline */
+export type SourceType = 'rss' | 'hackernews' | 'arxiv' | 'github' | 'reddit' | 'twitter'
+
+/** Extended content source config (replaces FeedSource for new sources) */
+export interface ContentSource {
+  name: string
+  url: string
+  type: SourceType
+  tier: 1 | 2 | 3
+  authorityWeight: number
+  enabled: boolean
+}
+
+/** Raw article as extracted from an RSS feed or other source */
 export interface RawArticle {
   title: string
   url: string
   description: string
   publishedAt: string
   sourceName: string
+  sourceType?: SourceType
+  engagement?: number | null
 }
 
 /** Article after AI summarization, ready for scoring */
@@ -82,8 +97,8 @@ export interface ScoringWeights {
 /** Pipeline configuration */
 export interface PipelineConfig {
   feeds: FeedSource[]
+  sources: ContentSource[]
   scoringWeights: ScoringWeights
   deduplicationThreshold: number
   maxArticlesPerRun: number
-  outputDir: string
 }

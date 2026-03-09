@@ -4,18 +4,14 @@
 // ---------------------------------------------------------------------------
 
 import type { ProcessedArticle, ScoringWeights, FeedSource } from './types.js'
+import {
+  DEFAULT_WEIGHTS,
+  SCORING_HALF_LIFE_MS,
+  DEFAULT_ENGAGEMENT_PROXY,
+  DEFAULT_VISUAL_SCORE,
+} from './config.js'
 
-/** Default scoring weights */
-export const DEFAULT_WEIGHTS: ScoringWeights = {
-  recency: 0.35,
-  sourceAuthority: 0.25,
-  engagementProxy: 0.2,
-  visualRichness: 0.1,
-  novelty: 0.1,
-}
-
-/** 24 hours in milliseconds */
-const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000
+export { DEFAULT_WEIGHTS }
 
 /**
  * Calculate recency score (0-1).
@@ -28,9 +24,8 @@ function recencyScore(publishedAt: string): number {
 
   if (ageMs <= 0) return 1
 
-  // Exponential decay: half-life of 12 hours
-  const halfLife = TWENTY_FOUR_HOURS_MS / 2
-  return Math.max(0, Math.exp((-ageMs * Math.LN2) / halfLife))
+  // Exponential decay with configurable half-life
+  return Math.max(0, Math.exp((-ageMs * Math.LN2) / SCORING_HALF_LIFE_MS))
 }
 
 /**
@@ -43,7 +38,7 @@ function sourceAuthorityScore(
   const feed = feeds.find(
     (f) => f.name.toLowerCase() === sourceName.toLowerCase()
   )
-  return feed?.authorityWeight ?? 0.5
+  return feed?.authorityWeight ?? DEFAULT_ENGAGEMENT_PROXY
 }
 
 /**
@@ -51,7 +46,7 @@ function sourceAuthorityScore(
  * In production, this would use social signals, click data, etc.
  */
 function engagementProxyScore(): number {
-  return 0.5
+  return DEFAULT_ENGAGEMENT_PROXY
 }
 
 /**
@@ -62,7 +57,7 @@ function visualRichnessScore(article: ProcessedArticle): number {
   if (article.visualData !== null && article.visualType !== null) {
     return 1.0
   }
-  return 0.2
+  return DEFAULT_VISUAL_SCORE
 }
 
 /**

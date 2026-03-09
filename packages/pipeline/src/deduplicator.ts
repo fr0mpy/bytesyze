@@ -4,7 +4,10 @@
 // Stage 2: Title similarity (Jaccard on word tokens)
 // ---------------------------------------------------------------------------
 
+import { createHash } from 'node:crypto'
 import type { RawArticle } from './types.js'
+import { createPipelineClient } from './supabase.js'
+import { DEFAULT_DEDUP_THRESHOLD } from './config.js'
 
 /**
  * Tokenize a string into lowercase word tokens.
@@ -55,7 +58,7 @@ function jaccardSimilarity(setA: Set<string>, setB: Set<string>): number {
  */
 export function deduplicateArticles(
   articles: RawArticle[],
-  similarityThreshold: number = 0.7
+  similarityThreshold: number = DEFAULT_DEDUP_THRESHOLD
 ): RawArticle[] {
   // Sort by published date ascending (keep earliest)
   const sorted = [...articles].sort(
@@ -105,4 +108,38 @@ export function deduplicateArticles(
   )
 
   return kept
+}
+
+/**
+ * Check which articles already exist in the database by source_hash.
+ * Filters out articles whose URL hash is already stored in the cards table.
+ *
+ * @param articles - Raw articles to check against the database
+ * @returns Articles that are not yet in the database
+ */
+export async function filterExistingArticles(articles: RawArticle[]): Promise<RawArticle[]> {
+  if (articles.length === 0) return []
+
+  const supabase = createPipelineClient()
+  const hashes = articles.map((a) => {
+    const hash = createHash('sha256').update(a.url).digest('hex').slice(0, 12)
+    return `sha256-${hash}`
+  })
+
+  const { data: existing } = await supabase
+    .from('cards')
+    .select('source_hash')
+    .in('source_hash', hashes)
+
+  const existingSet = new Set((existing ?? []).map((r: { source_hash: string }) => r.source_hash))
+
+  const filtered = articles.filter((a) => {
+    const hash = `sha256-${createHash('sha256').update(a.url).digest('hex').slice(0, 12)}`
+    return !existingSet.has(hash)
+  })
+
+  console.log(
+    `[dedup] DB check: ${articles.length} -> ${filtered.length} (${articles.length - filtered.length} already in DB)`
+  )
+  return filtered
 }

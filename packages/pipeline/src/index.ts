@@ -1,27 +1,24 @@
 // ---------------------------------------------------------------------------
 // Content Pipeline Orchestrator
-// Fetch -> Deduplicate -> Validate -> Summarize -> Score -> Publish
+// Fetch -> Filter existing -> Deduplicate -> Validate -> Summarize -> Score -> Publish
 // ---------------------------------------------------------------------------
 
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { fetchArticles, DEFAULT_FEEDS } from './fetcher.js'
-import { deduplicateArticles } from './deduplicator.js'
+import { fetchAllSources } from './sources/index.js'
+import { deduplicateArticles, filterExistingArticles } from './deduplicator.js'
 import { validateArticles } from './validator.js'
 import { summarizeArticles } from './summarizer.js'
 import { scoreArticles, DEFAULT_WEIGHTS } from './scorer.js'
 import { publishCards } from './publisher.js'
 import type { PipelineConfig, PublishableCard } from './types.js'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
+import { DEFAULT_FEEDS } from './fetcher.js'
 
 /** Default pipeline configuration */
 const DEFAULT_CONFIG: PipelineConfig = {
   feeds: DEFAULT_FEEDS,
+  sources: [],
   scoringWeights: DEFAULT_WEIGHTS,
   deduplicationThreshold: 0.7,
   maxArticlesPerRun: 50,
-  outputDir: join(__dirname, '..', 'output'),
 }
 
 /**
@@ -33,11 +30,6 @@ function buildConfig(): PipelineConfig {
   const maxArticles = process.env['PIPELINE_MAX_ARTICLES']
   if (maxArticles) {
     config.maxArticlesPerRun = parseInt(maxArticles, 10)
-  }
-
-  const outputDir = process.env['PIPELINE_OUTPUT_DIR']
-  if (outputDir) {
-    config.outputDir = outputDir
   }
 
   const dedupThreshold = process.env['PIPELINE_DEDUP_THRESHOLD']
@@ -52,12 +44,13 @@ function buildConfig(): PipelineConfig {
  * Run the full content pipeline.
  *
  * Stages:
- * 1. Fetch articles from RSS feeds
+ * 1. Fetch articles from all sources (RSS, Hacker News, etc.)
+ * 1b. Filter out already-published articles
  * 2. Deduplicate by URL and title similarity
  * 3. Validate for AI relevance
- * 4. Summarize with AI (mock implementation)
+ * 4. Summarize with Claude Haiku API
  * 5. Score with weighted algorithm
- * 6. Publish to output
+ * 6. Publish to Supabase
  */
 export async function runPipeline(
   overrides?: Partial<PipelineConfig>
@@ -70,9 +63,9 @@ export async function runPipeline(
   console.log(`[pipeline] Max articles: ${config.maxArticlesPerRun}`)
   console.log('='.repeat(60))
 
-  // Stage 1: Fetch
+  // Stage 1: Fetch from all sources
   console.log('\n--- Stage 1: Fetching ---')
-  const rawArticles = await fetchArticles(config.feeds)
+  const rawArticles = await fetchAllSources(config.feeds)
   console.log(`[pipeline] Fetched ${rawArticles.length} total articles`)
 
   if (rawArticles.length === 0) {
@@ -80,17 +73,27 @@ export async function runPipeline(
     return []
   }
 
+  // Stage 1b: Filter out already-published articles
+  console.log('\n--- Stage 1b: Filtering existing ---')
+  const newArticles = await filterExistingArticles(rawArticles)
+  console.log(`[pipeline] After filtering existing: ${newArticles.length} articles`)
+
+  if (newArticles.length === 0) {
+    console.log('[pipeline] No new articles. Exiting.')
+    return []
+  }
+
   // Stage 2: Deduplicate
   console.log('\n--- Stage 2: Deduplication ---')
   const uniqueArticles = deduplicateArticles(
-    rawArticles,
+    newArticles,
     config.deduplicationThreshold
   )
   console.log(`[pipeline] After dedup: ${uniqueArticles.length} articles`)
 
   // Stage 3: Validate
   console.log('\n--- Stage 3: Validation ---')
-  const validArticles = validateArticles(uniqueArticles)
+  const validArticles = await validateArticles(uniqueArticles)
   console.log(`[pipeline] After validation: ${validArticles.length} articles`)
 
   if (validArticles.length === 0) {
@@ -103,7 +106,7 @@ export async function runPipeline(
 
   // Stage 4: Summarize
   console.log('\n--- Stage 4: Summarization ---')
-  const processedArticles = summarizeArticles(limitedArticles)
+  const processedArticles = await summarizeArticles(limitedArticles)
 
   // Stage 5: Score
   console.log('\n--- Stage 5: Scoring ---')
@@ -115,7 +118,7 @@ export async function runPipeline(
 
   // Stage 6: Publish
   console.log('\n--- Stage 6: Publishing ---')
-  const cards = await publishCards(scoredArticles, config.outputDir)
+  const cards = await publishCards(scoredArticles)
 
   console.log('\n' + '='.repeat(60))
   console.log(`[pipeline] Complete! Published ${cards.length} cards`)

@@ -4,6 +4,7 @@
 // ---------------------------------------------------------------------------
 
 import type { RawArticle, FeedSource } from './types.js'
+import { USER_AGENT, RSS_ACCEPT_HEADER, REQUEST_TIMEOUT_MS } from './config.js'
 
 /** Default RSS feed sources for AI news */
 export const DEFAULT_FEEDS: FeedSource[] = [
@@ -25,6 +26,26 @@ export const DEFAULT_FEEDS: FeedSource[] = [
   {
     name: 'MIT Technology Review',
     url: 'https://www.technologyreview.com/feed/',
+    authorityWeight: 0.95,
+  },
+  {
+    name: 'OpenAI Blog',
+    url: 'https://openai.com/blog/rss.xml',
+    authorityWeight: 1.0,
+  },
+  {
+    name: 'Anthropic Blog',
+    url: 'https://www.anthropic.com/rss.xml',
+    authorityWeight: 1.0,
+  },
+  {
+    name: 'Google AI Blog',
+    url: 'https://blog.google/technology/ai/rss/',
+    authorityWeight: 0.95,
+  },
+  {
+    name: 'DeepMind Blog',
+    url: 'https://deepmind.google/blog/rss.xml',
     authorityWeight: 0.95,
   },
 ]
@@ -128,10 +149,10 @@ async function fetchSingleFeed(feed: FeedSource): Promise<RawArticle[]> {
   try {
     const response = await fetch(feed.url, {
       headers: {
-        'User-Agent': 'bytesyze-pipeline/0.0.1',
-        Accept: 'application/rss+xml, application/atom+xml, application/xml, text/xml',
+        'User-Agent': USER_AGENT,
+        Accept: RSS_ACCEPT_HEADER,
       },
-      signal: AbortSignal.timeout(10_000),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     })
 
     if (!response.ok) {
