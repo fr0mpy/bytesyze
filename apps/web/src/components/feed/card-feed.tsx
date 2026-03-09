@@ -1,14 +1,12 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import Link from 'next/link'
 import useEmblaCarousel from 'embla-carousel-react'
 import { useTranslations, feed, aria, card as cardKeys } from '@bytesyze/i18n'
 import { Routes } from '@/lib/routes'
 import { FeedStyles as S, CategoryColors } from './styles'
 import type { CardFeedProps } from './types'
-
-const STALE_THRESHOLD_MS = 6 * 60 * 60 * 1000 // 6 hours
 
 function getTimeAgo(dateString: string): string {
   const now = Date.now()
@@ -40,26 +38,6 @@ export function CardFeed({ initialCards, initialNextCursor: _initialNextCursor }
     emblaApi?.scrollNext()
   }, [emblaApi])
 
-  const staleHours = useMemo(() => {
-    if (initialCards.length === 0) return 0
-    const now = Date.now()
-    const isAllStale = initialCards.every((c) => {
-      const publishedDate = c.published_at ?? c.created_at
-      return now - new Date(publishedDate).getTime() > STALE_THRESHOLD_MS
-    })
-    if (!isAllStale) return 0
-    const newest = Math.max(
-      ...initialCards.map((c) => new Date(c.published_at ?? c.created_at).getTime()),
-    )
-    return Math.floor((now - newest) / 3_600_000)
-  }, [initialCards])
-
-  const allStale = staleHours > 0
-
-  const handleRefresh = useCallback(() => {
-    window.location.reload()
-  }, [])
-
   if (initialCards.length === 0) {
     return (
       <div className={S.emptyState}>
@@ -70,19 +48,6 @@ export function CardFeed({ initialCards, initialNextCursor: _initialNextCursor }
 
   return (
     <div className={S.container}>
-      {allStale && (
-        <div className={S.staleBanner} role="status">
-          <span>{t(feed.stale, { hours: staleHours })}</span>
-          <button
-            type="button"
-            className={S.staleRefreshButton}
-            onClick={handleRefresh}
-          >
-            {t(feed.refresh)}
-          </button>
-        </div>
-      )}
-
       <div
         className={S.viewport}
         ref={emblaRef}
@@ -122,6 +87,17 @@ export function CardFeed({ initialCards, initialNextCursor: _initialNextCursor }
                   </div>
 
                   <p className={S.cardTeaser}>{cardItem.teaser}</p>
+
+                  {cardItem.key_points.length > 0 && (
+                    <ul className={S.keyPointsList}>
+                      {cardItem.key_points.map((point, i) => (
+                        <li key={i} className={S.keyPointsItem}>
+                          <span className={S.keyPointsBullet} aria-hidden="true" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
                   <div className={S.cardSourceRow}>
                     <span className={S.cardSourceLabel}>{t(cardKeys.source)}:</span>

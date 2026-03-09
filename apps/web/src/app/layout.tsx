@@ -1,8 +1,15 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages, getTranslations } from '@bytesyze/i18n'
-import { BottomNav } from '@/components/layout/bottom-nav'
+import { Inter } from 'next/font/google'
+
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-sans',
+})
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -36,7 +43,7 @@ export default async function RootLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -44,10 +51,9 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-dvh bg-background font-sans text-foreground antialiased pb-14">
+      <body className="min-h-dvh bg-background font-sans text-foreground antialiased">
         <NextIntlClientProvider messages={messages}>
           {children}
-          <BottomNav />
         </NextIntlClientProvider>
       </body>
     </html>
