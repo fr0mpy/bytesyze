@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, Copy, Linkedin, MessageCircle } from 'lucide-react'
 import { useTranslations, share as shareKeys } from '@bytesyze/i18n'
+import { COPY_FEEDBACK_DURATION_MS } from '@/lib/config'
 import { ShareMenuStyles as S } from './styles'
 import type { ShareMenuProps } from './types'
 
@@ -60,7 +61,7 @@ export function ShareMenu({ title, url, open, onClose }: ShareMenuProps) {
     setTimeout(() => {
       setCopied(false)
       onClose()
-    }, 1500)
+    }, COPY_FEEDBACK_DURATION_MS)
   }, [url, onClose])
 
   if (!open) return null

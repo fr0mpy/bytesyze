@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getCardById } from '@/lib/data/cards'
+import { CACHE_CONTROL } from '@/lib/config'
 
 export const runtime = 'edge'
 
@@ -29,7 +30,7 @@ export async function GET(
 
   return NextResponse.json(result, {
     headers: {
-      'Cache-Control': 's-maxage=3600, stale-while-revalidate=86400',
+      'Cache-Control': CACHE_CONTROL.cardDetail,
     },
   })
 }

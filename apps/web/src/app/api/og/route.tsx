@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { getCardById } from '@/lib/data/cards'
+import { CACHE_CONTROL } from '@/lib/config'
 
 export const runtime = 'edge'
 
@@ -116,7 +117,7 @@ export async function GET(request: Request) {
       width: 1200,
       height: 630,
       headers: {
-        'Cache-Control': 'public, s-maxage=86400',
+        'Cache-Control': CACHE_CONTROL.ogImage,
       },
     },
   )

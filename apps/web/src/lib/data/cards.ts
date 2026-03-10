@@ -1,5 +1,6 @@
 import { createAnonClient } from '@/lib/supabase/client'
 import type { Card, CardCategory } from '@/lib/supabase/types'
+import { FRESH_THRESHOLD_MS, STALE_THRESHOLD_MS, PAGINATION } from '@/lib/config'
 
 interface GetCardsOptions {
   cursor?: string
@@ -21,8 +22,7 @@ interface GetCardByIdResult {
   nextId: string | null
 }
 
-const FRESH_THRESHOLD_MS = 2 * 60 * 60 * 1000 // 2 hours
-const STALE_THRESHOLD_MS = 6 * 60 * 60 * 1000 // 6 hours
+// Freshness thresholds imported from @/lib/config
 
 function computeFreshness(newestPublishedAt: string | null): FreshnessStatus {
   if (!newestPublishedAt) return 'stale'
@@ -39,7 +39,7 @@ function computeFreshness(newestPublishedAt: string | null): FreshnessStatus {
  * Uses keyset pagination on published_at for stable ordering.
  */
 export async function getCards(options?: GetCardsOptions): Promise<GetCardsResult> {
-  const limit = options?.limit ?? 20
+  const limit = options?.limit ?? PAGINATION.defaultLimit
   const cursor = options?.cursor
   const category = options?.category
 

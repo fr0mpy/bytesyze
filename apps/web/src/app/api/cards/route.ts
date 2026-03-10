@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getCards } from '@/lib/data/cards'
 import type { CardCategory } from '@/lib/supabase/types'
+import { PAGINATION, CACHE_CONTROL } from '@/lib/config'
 
 export const runtime = 'edge'
 
@@ -17,9 +18,9 @@ const VALID_CATEGORIES: ReadonlySet<string> = new Set<CardCategory>([
   'Industry',
 ])
 
-const MIN_LIMIT = 1
-const MAX_LIMIT = 100
-const DEFAULT_LIMIT = 20
+const MIN_LIMIT: number = PAGINATION.minLimit
+const MAX_LIMIT: number = PAGINATION.maxLimit
+const DEFAULT_LIMIT: number = PAGINATION.defaultLimit
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -65,7 +66,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json(result, {
     headers: {
-      'Cache-Control': 's-maxage=60, stale-while-revalidate=300',
+      'Cache-Control': CACHE_CONTROL.cards,
     },
   })
 }
