@@ -29,7 +29,7 @@ function toPublishableCard(scored: ScoredArticle): PublishableCard {
     category: article.category,
     visual_type: article.visualType,
     visual_data: article.visualData,
-    image_url: null,
+    image_url: scored.imageUrl ?? null,
     locale: 'en',
     status: 'published',
     relevance_score: score / 100,

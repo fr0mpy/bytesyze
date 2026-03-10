@@ -7,13 +7,14 @@
 import { createHash } from 'node:crypto'
 import type { RawArticle } from './types.js'
 import { createPipelineClient } from './supabase.js'
-import { DEFAULT_DEDUP_THRESHOLD } from './config.js'
+import { DEFAULT_DEDUP_THRESHOLD, DEDUP_MIN_WORD_LENGTH } from './config.js'
 
 /**
  * Tokenize a string into lowercase word tokens.
  * Removes punctuation and common stop words.
  */
-function tokenize(text: string): Set<string> {
+/** @internal Exported for testing */
+export function tokenize(text: string): Set<string> {
   const stopWords = new Set([
     'the', 'a', 'an', 'is', 'are', 'was', 'were', 'in', 'on', 'at',
     'to', 'for', 'of', 'and', 'or', 'but', 'with', 'by', 'from', 'as',
@@ -24,7 +25,7 @@ function tokenize(text: string): Set<string> {
     .toLowerCase()
     .replace(/[^\w\s]/g, '')
     .split(/\s+/)
-    .filter((w) => w.length > 1 && !stopWords.has(w))
+    .filter((w) => w.length > DEDUP_MIN_WORD_LENGTH && !stopWords.has(w))
 
   return new Set(words)
 }
@@ -33,7 +34,8 @@ function tokenize(text: string): Set<string> {
  * Compute Jaccard similarity between two sets.
  * Returns a value between 0 (no overlap) and 1 (identical).
  */
-function jaccardSimilarity(setA: Set<string>, setB: Set<string>): number {
+/** @internal Exported for testing */
+export function jaccardSimilarity(setA: Set<string>, setB: Set<string>): number {
   if (setA.size === 0 && setB.size === 0) return 1
 
   let intersectionSize = 0

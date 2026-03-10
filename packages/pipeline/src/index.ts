@@ -9,6 +9,10 @@ import { validateArticles } from './validator.js'
 import { summarizeArticles } from './summarizer.js'
 import { scoreArticles, DEFAULT_WEIGHTS } from './scorer.js'
 import { publishCards } from './publisher.js'
+import { enrichWithOgImages } from './og-image.js'
+import { enrichWithFullText } from './full-text.js'
+import { notifyHighScoreCards } from './notify.js'
+import { updateSourceHealth } from './source-health.js'
 import type { PipelineConfig, PublishableCard } from './types.js'
 import { DEFAULT_FEEDS } from './fetcher.js'
 
@@ -65,8 +69,14 @@ export async function runPipeline(
 
   // Stage 1: Fetch from all sources
   console.log('\n--- Stage 1: Fetching ---')
-  const rawArticles = await fetchAllSources(config.feeds)
+  const { articles: rawArticles, healthResults } = await fetchAllSources(config.feeds)
   console.log(`[pipeline] Fetched ${rawArticles.length} total articles`)
+
+  // Track source health (non-blocking)
+  updateSourceHealth(healthResults).catch((err: unknown) => {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.warn(`[pipeline] Source health update failed: ${msg}`)
+  })
 
   if (rawArticles.length === 0) {
     console.log('[pipeline] No articles fetched. Exiting.')
@@ -104,9 +114,13 @@ export async function runPipeline(
   // Limit to max articles per run
   const limitedArticles = validArticles.slice(0, config.maxArticlesPerRun)
 
+  // Stage 3b: Enrich with full-text content
+  console.log('\n--- Stage 3b: Full-Text Enrichment ---')
+  const fullTextArticles = await enrichWithFullText(limitedArticles)
+
   // Stage 4: Summarize
   console.log('\n--- Stage 4: Summarization ---')
-  const processedArticles = await summarizeArticles(limitedArticles)
+  const processedArticles = await summarizeArticles(fullTextArticles)
 
   // Stage 5: Score
   console.log('\n--- Stage 5: Scoring ---')
@@ -116,9 +130,19 @@ export async function runPipeline(
     config.scoringWeights
   )
 
+  // Stage 5b: Extract OG images
+  console.log('\n--- Stage 5b: OG Image Extraction ---')
+  const withImages = await enrichWithOgImages(scoredArticles)
+
   // Stage 6: Publish
   console.log('\n--- Stage 6: Publishing ---')
-  const cards = await publishCards(scoredArticles)
+  const cards = await publishCards(withImages)
+
+  // Stage 7: Push notifications for high-score cards (non-blocking)
+  notifyHighScoreCards(cards).catch((err: unknown) => {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.warn(`[pipeline] Push notification failed: ${msg}`)
+  })
 
   console.log('\n' + '='.repeat(60))
   console.log(`[pipeline] Complete! Published ${cards.length} cards`)

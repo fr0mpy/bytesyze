@@ -131,6 +131,7 @@ function scoreArticle(
 export interface ScoredArticle {
   article: ProcessedArticle
   score: number
+  imageUrl?: string
 }
 
 /**

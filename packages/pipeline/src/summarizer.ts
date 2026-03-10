@@ -19,6 +19,7 @@ import {
   VALID_CATEGORIES,
   VALID_VISUAL_TYPES,
   CATEGORY_KEYWORDS,
+  MOCK_MIN_SENTENCE_LENGTH,
 } from './config.js'
 
 const SYSTEM_PROMPT = `You are a news summarizer for bytesyze.ai, an AI news app for non-technical readers.
@@ -101,9 +102,9 @@ function generateMockKeyPoints(description: string): string[] {
   const sentences = description
     .split(/[.!?]+/)
     .map((s) => s.trim())
-    .filter((s) => s.length > 15)
+    .filter((s) => s.length > MOCK_MIN_SENTENCE_LENGTH)
 
-  if (sentences.length >= 3) {
+  if (sentences.length >= KEY_POINTS_MAX_COUNT) {
     return sentences.slice(0, KEY_POINTS_MAX_COUNT).map((s) => truncate(s, KEY_POINTS_MAX_LENGTH))
   }
 
@@ -188,13 +189,19 @@ async function callHaiku(
   client: Anthropic,
   article: RawArticle
 ): Promise<Omit<ProcessedArticle, 'sourceUrl' | 'sourceName' | 'publishedAt' | 'sourceHash'> | null> {
-  const userMessage = [
+  const messageParts = [
     `Title: ${article.title}`,
     `Source: ${article.sourceName}`,
     `Published: ${article.publishedAt}`,
     '',
     article.description,
-  ].join('\n')
+  ]
+
+  if (article.fullText) {
+    messageParts.push('', 'Full article text:', article.fullText)
+  }
+
+  const userMessage = messageParts.join('\n')
 
   const response = await client.messages.create({
     model: MODELS.summarizer,

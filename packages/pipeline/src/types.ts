@@ -41,6 +41,7 @@ export interface RawArticle {
   sourceName: string
   sourceType?: SourceType
   engagement?: number | null
+  fullText?: string
 }
 
 /** Article after AI summarization, ready for scoring */

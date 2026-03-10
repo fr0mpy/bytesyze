@@ -34,11 +34,6 @@ export const DEFAULT_FEEDS: FeedSource[] = [
     authorityWeight: 1.0,
   },
   {
-    name: 'Anthropic Blog',
-    url: 'https://www.anthropic.com/rss.xml',
-    authorityWeight: 1.0,
-  },
-  {
     name: 'Google AI Blog',
     url: 'https://blog.google/technology/ai/rss/',
     authorityWeight: 0.95,

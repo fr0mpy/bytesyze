@@ -4,7 +4,7 @@
 // ---------------------------------------------------------------------------
 
 import type { RawArticle } from '../types.js'
-import { USER_AGENT, REQUEST_TIMEOUT_MS, ARXIV_API_BASE, ARXIV_CATEGORIES, ARXIV_MAX_RESULTS } from '../config.js'
+import { USER_AGENT, REQUEST_TIMEOUT_MS, ARXIV_API_BASE, ARXIV_CATEGORIES, ARXIV_MAX_RESULTS, ARXIV_MAX_AUTHORS } from '../config.js'
 
 const ARXIV_QUERY_URL = `${ARXIV_API_BASE}?search_query=${ARXIV_CATEGORIES.map((c) => `cat:${c}`).join('+OR+')}&sortBy=submittedDate&sortOrder=descending&max_results=${ARXIV_MAX_RESULTS}`
 
@@ -95,7 +95,7 @@ export async function fetchArxiv(): Promise<RawArticle[]> {
           : title
 
         const authorSuffix = authors.length > 0
-          ? ` (${authors.slice(0, 3).join(', ')}${authors.length > 3 ? ' et al.' : ''})`
+          ? ` (${authors.slice(0, ARXIV_MAX_AUTHORS).join(', ')}${authors.length > ARXIV_MAX_AUTHORS ? ' et al.' : ''})`
           : ''
 
         articles.push({

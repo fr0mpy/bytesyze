@@ -56,6 +56,16 @@ export const KEY_POINTS_MAX_LENGTH = 120
 /** Maximum number of key points per card */
 export const KEY_POINTS_MAX_COUNT = 3
 
+/** Minimum sentence length for mock key point generation */
+export const MOCK_MIN_SENTENCE_LENGTH = 15
+
+// ==========================================================================
+// Push Notifications
+// ==========================================================================
+
+/** Minimum relevance score (0-1) to trigger a push notification */
+export const PUSH_SCORE_THRESHOLD = 0.8
+
 // ==========================================================================
 // Validation
 // ==========================================================================
@@ -69,7 +79,6 @@ export const MIN_DESCRIPTION_LENGTH = 50
 /** Tier-1 source names that skip LLM borderline validation */
 export const TIER_1_SOURCES = new Set([
   'OpenAI Blog',
-  'Anthropic Blog',
   'Google AI Blog',
   'DeepMind Blog',
   'arXiv',
@@ -104,6 +113,9 @@ export const DEFAULT_WEIGHTS: ScoringWeights = {
 /** Default Jaccard similarity threshold for title dedup */
 export const DEFAULT_DEDUP_THRESHOLD = 0.7
 
+/** Minimum word length for tokenization (words <= this are filtered) */
+export const DEDUP_MIN_WORD_LENGTH = 1
+
 // ==========================================================================
 // Publisher
 // ==========================================================================
@@ -113,6 +125,57 @@ export const PUBLISHER_RETRY = {
   maxAttempts: 3,
   baseDelayMs: 1_000,
 } as const
+
+// ==========================================================================
+// OG Image Extraction
+// ==========================================================================
+
+/** OG image fetch timeout in milliseconds */
+export const OG_IMAGE_TIMEOUT_MS = 5_000
+
+/** Maximum OG image URL length */
+export const OG_IMAGE_MAX_URL_LENGTH = 2_048
+
+/** OG image extraction batch size */
+export const OG_IMAGE_BATCH_SIZE = 5
+
+/** Maximum HTML length to scan for OG meta tags (bytes) */
+export const OG_IMAGE_MAX_HTML_LENGTH = 10_000
+
+// ==========================================================================
+// Full-Text Content Fetching
+// ==========================================================================
+
+/** Full-text fetch timeout in milliseconds */
+export const FULL_TEXT_TIMEOUT_MS = 8_000
+
+/** Maximum full-text content length (chars) */
+export const FULL_TEXT_MAX_LENGTH = 5_000
+
+/** Full-text extraction batch size */
+export const FULL_TEXT_BATCH_SIZE = 5
+
+/** Minimum description length to skip full-text (RSS already has full content) */
+export const FULL_TEXT_SKIP_THRESHOLD = 1_000
+
+/** Minimum extracted text length to be considered valid content */
+export const FULL_TEXT_MIN_CONTENT_LENGTH = 200
+
+// ==========================================================================
+// Source Health Tracking
+// ==========================================================================
+
+/** Consecutive failures before marking source as degraded */
+export const SOURCE_HEALTH_DEGRADED_THRESHOLD = 3
+
+/** Consecutive failures before marking source as down */
+export const SOURCE_HEALTH_DOWN_THRESHOLD = 5
+
+/** Base backoff time for down sources (30 minutes) */
+export const SOURCE_HEALTH_BACKOFF_BASE_MS = 30 * 60 * 1_000
+
+/** Maximum backoff time for down sources (24 hours) */
+export const SOURCE_HEALTH_BACKOFF_MAX_MS = 24 * 60 * 60 * 1_000
 
 // ==========================================================================
 // Source Fetch Limits
@@ -133,6 +196,9 @@ export const ARXIV_API_BASE = 'http://export.arxiv.org/api/query'
 /** arXiv categories to query */
 export const ARXIV_CATEGORIES = ['cs.AI', 'cs.CL', 'cs.LG'] as const
 
+/** arXiv: max authors to display in description */
+export const ARXIV_MAX_AUTHORS = 3
+
 /** GitHub API: repos per page */
 export const GITHUB_PER_PAGE = 15
 
@@ -143,14 +209,41 @@ export const GITHUB_PER_PAGE = 15
 /** Reddit subreddits to monitor */
 export const REDDIT_SUBREDDITS = ['MachineLearning', 'LocalLLaMA'] as const
 
+/** Reddit API: max posts to fetch per subreddit */
+export const REDDIT_MAX_POSTS_PER_SUB = 25
+
+/** Reddit OAuth2 API base URL */
+export const REDDIT_API_BASE = 'https://oauth.reddit.com'
+
+/** Reddit OAuth2 token URL */
+export const REDDIT_TOKEN_URL = 'https://www.reddit.com/api/v1/access_token'
+
 /** X/Twitter curated handles to follow */
 export const TWITTER_CURATED_HANDLES = [
-  'kaboré', 'karpathy', 'ylecun', 'sama', 'AndrewYNg',
+  'karpathy', 'ylecun', 'sama', 'AndrewYNg',
 ] as const
 
 /** X/Twitter AI search query */
 export const TWITTER_AI_SEARCH_QUERY =
   '(AI OR LLM OR "machine learning") -is:retweet lang:en'
+
+/** xAI Grok API base URL (OpenAI-compatible) */
+export const GROK_API_BASE = 'https://api.x.ai/v1'
+
+/** Grok model ID */
+export const GROK_MODEL = 'grok-3'
+
+/** Grok max tokens for response */
+export const GROK_MAX_TOKENS = 2_000
+
+/** Grok API temperature */
+export const GROK_TEMPERATURE = 0.1
+
+/** Maximum title length for tweets converted to articles */
+export const TWITTER_MAX_TITLE_LENGTH = 100
+
+/** Maximum Reddit post description length */
+export const REDDIT_MAX_DESCRIPTION_LENGTH = 500
 
 // ==========================================================================
 // Categories & Visual Types
