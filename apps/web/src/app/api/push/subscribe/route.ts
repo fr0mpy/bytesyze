@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { RATE_LIMITS } from '@/lib/config'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 import { createServiceClient } from '@/lib/supabase/server'
 
 export const runtime = 'nodejs'
@@ -13,12 +15,29 @@ interface PushSubscriptionBody {
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request)
+    const { allowed, retryAfterMs } = checkRateLimit(
+      `push-subscribe:${ip}`,
+      RATE_LIMITS.pushSubscribe.maxRequests,
+      RATE_LIMITS.pushSubscribe.windowMs,
+    )
+
+    if (!allowed) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil(retryAfterMs / 1000)) },
+        },
+      )
+    }
+
     const body = (await request.json()) as PushSubscriptionBody
 
     if (!body.endpoint || !body.keys?.p256dh || !body.keys?.auth) {
       return NextResponse.json(
         { error: 'Invalid subscription data' },
-        { status: 400 }
+        { status: 400 },
       )
     }
 
@@ -32,14 +51,14 @@ export async function POST(request: Request) {
           p256dh_key: body.keys.p256dh,
           auth_key: body.keys.auth,
         },
-        { onConflict: 'endpoint' }
+        { onConflict: 'endpoint' },
       )
 
     if (error) {
       console.error('[push/subscribe] Supabase error:', error.message)
       return NextResponse.json(
         { error: 'Failed to save subscription' },
-        { status: 500 }
+        { status: 500 },
       )
     }
 
@@ -47,7 +66,7 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json(
       { error: 'Invalid request' },
-      { status: 400 }
+      { status: 400 },
     )
   }
 }

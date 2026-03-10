@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 import { RATE_LIMITS, PIPELINE_MAX_DURATION } from '@/lib/config'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 export const runtime = 'nodejs'
 export const maxDuration = PIPELINE_MAX_DURATION

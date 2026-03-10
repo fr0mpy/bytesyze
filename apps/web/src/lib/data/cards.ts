@@ -1,6 +1,6 @@
+import { FRESH_THRESHOLD_MS, STALE_THRESHOLD_MS, PAGINATION } from '@/lib/config'
 import { createAnonClient } from '@/lib/supabase/client'
 import type { Card, CardCategory } from '@/lib/supabase/types'
-import { FRESH_THRESHOLD_MS, STALE_THRESHOLD_MS, PAGINATION } from '@/lib/config'
 
 interface GetCardsOptions {
   cursor?: string

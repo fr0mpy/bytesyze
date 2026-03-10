@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { getCardById } from '@/lib/data/cards'
 import { CACHE_CONTROL } from '@/lib/config'
+import { getCardById } from '@/lib/data/cards'
 
 export const runtime = 'edge'
 

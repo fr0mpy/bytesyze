@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { Routes } from '@/lib/routes'
 import { getAdminStats, getCardsByCategory, getSourceHealth } from '@/lib/data/admin'
+import { Routes } from '@/lib/routes'
 import { AdminDashboardStyles as S, getStatusBadgeClass } from './styles'
 
 export default async function AdminDashboardPage() {

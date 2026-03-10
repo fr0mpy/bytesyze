@@ -125,7 +125,15 @@ export async function getFlaggedCards(): Promise<FlaggedCard[]> {
 
   if (!cards) return []
 
-  return (cards as Array<{ id: string; title: string; source_name: string; category: string; published_at: string }>)
+  interface FlaggedCard {
+    id: string
+    title: string
+    source_name: string
+    category: string
+    published_at: string
+  }
+
+  return (cards as FlaggedCard[])
     .map((card) => ({
       ...card,
       flagCount: flagCounts.get(card.id) ?? 0,

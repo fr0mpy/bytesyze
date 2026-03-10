@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { Routes } from '@/lib/routes'
 import { createServiceClient } from '@/lib/supabase/server'
 
 export const runtime = 'nodejs'
@@ -7,6 +8,14 @@ interface SendPushBody {
   title: string
   body: string
   url?: string
+}
+
+interface WebPushModule {
+  setVapidDetails: (subject: string, publicKey: string, privateKey: string) => void
+  sendNotification: (
+    subscription: { endpoint: string; keys: { p256dh: string; auth: string } },
+    payload: string,
+  ) => Promise<unknown>
 }
 
 export async function POST(request: Request) {
@@ -19,13 +28,13 @@ export async function POST(request: Request) {
   }
 
   // Dynamically import web-push (it's a Node.js module)
-  let webpush: typeof import('web-push')
+  let webpush: WebPushModule
   try {
-    webpush = await import('web-push')
+    webpush = await import('web-push') as unknown as WebPushModule
   } catch {
     return NextResponse.json(
       { error: 'web-push not installed' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 
@@ -35,14 +44,14 @@ export async function POST(request: Request) {
   if (!vapidPublicKey || !vapidPrivateKey) {
     return NextResponse.json(
       { error: 'VAPID keys not configured' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 
   webpush.setVapidDetails(
     'mailto:admin@bytesyze.ai',
     vapidPublicKey,
-    vapidPrivateKey
+    vapidPrivateKey,
   )
 
   try {
@@ -51,7 +60,7 @@ export async function POST(request: Request) {
     if (!body.title || !body.body) {
       return NextResponse.json(
         { error: 'title and body are required' },
-        { status: 400 }
+        { status: 400 },
       )
     }
 
@@ -67,7 +76,7 @@ export async function POST(request: Request) {
     const payload = JSON.stringify({
       title: body.title,
       body: body.body,
-      url: body.url ?? '/',
+      url: body.url ?? Routes.home,
     })
 
     let sent = 0
@@ -84,9 +93,9 @@ export async function POST(request: Request) {
               auth: (sub as { auth_key: string }).auth_key,
             },
           },
-          payload
-        )
-      )
+          payload,
+        ),
+      ),
     )
 
     for (let i = 0; i < results.length; i++) {
@@ -99,7 +108,7 @@ export async function POST(request: Request) {
         const err = result.reason as { statusCode?: number }
         if (err.statusCode === 410) {
           staleEndpoints.push(
-            (subscriptions[i] as { endpoint: string }).endpoint
+            (subscriptions[i] as { endpoint: string }).endpoint,
           )
         }
       }
@@ -117,7 +126,7 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json(
       { error: 'Failed to send notifications' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 }

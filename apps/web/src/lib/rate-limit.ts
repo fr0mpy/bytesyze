@@ -2,14 +2,14 @@
 // In-memory sliding window rate limiter
 // ---------------------------------------------------------------------------
 
+import { RATE_LIMITS } from '@/lib/config'
+
 interface RateLimitEntry {
   count: number
   resetAt: number
 }
 
 const store = new Map<string, RateLimitEntry>()
-
-import { RATE_LIMITS } from '@/lib/config'
 
 /** Clean expired entries periodically to prevent memory leaks */
 const CLEANUP_INTERVAL_MS = RATE_LIMITS.cleanupIntervalMs
@@ -41,7 +41,7 @@ interface RateLimitResult {
 export function checkRateLimit(
   key: string,
   maxRequests: number,
-  windowMs: number
+  windowMs: number,
 ): RateLimitResult {
   cleanup()
   const now = Date.now()
@@ -63,8 +63,8 @@ export function checkRateLimit(
 /** Extract client IP from request headers */
 export function getClientIp(request: Request): string {
   return (
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
-    request.headers.get('x-real-ip') ??
-    '127.0.0.1'
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    ?? request.headers.get('x-real-ip')
+    ?? '127.0.0.1'
   )
 }

@@ -1,7 +1,7 @@
 import { after } from 'next/server'
-import { createAnonClient } from '@/lib/supabase/client'
-import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 import { RATE_LIMITS } from '@/lib/config'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
+import { createAnonClient } from '@/lib/supabase/client'
 import type { EventType } from '@/lib/supabase/types'
 
 export const runtime = 'nodejs'

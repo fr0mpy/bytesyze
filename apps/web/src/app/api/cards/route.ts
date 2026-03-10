@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
+import { PAGINATION, CACHE_CONTROL } from '@/lib/config'
 import { getCards } from '@/lib/data/cards'
 import type { CardCategory } from '@/lib/supabase/types'
-import { PAGINATION, CACHE_CONTROL } from '@/lib/config'
 
 export const runtime = 'edge'
 

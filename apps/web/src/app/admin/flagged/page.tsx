@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { Routes } from '@/lib/routes'
 import { getFlaggedCards } from '@/lib/data/admin'
+import { Routes } from '@/lib/routes'
 import { AdminFlaggedStyles as S } from '../styles'
 
 export default async function AdminFlaggedPage() {

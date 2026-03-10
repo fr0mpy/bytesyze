@@ -12,6 +12,8 @@ export const RATE_LIMITS = {
   events: { maxRequests: 100, windowMs: 10_000 },
   /** Pipeline API: 1 request per 60 seconds per IP */
   pipeline: { maxRequests: 1, windowMs: 60_000 },
+  /** Push subscribe API: 10 requests per 60 seconds per IP */
+  pushSubscribe: { maxRequests: 10, windowMs: 60_000 },
   /** Rate limiter store cleanup interval */
   cleanupIntervalMs: 60_000,
 } as const
