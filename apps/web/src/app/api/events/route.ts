@@ -1,8 +1,10 @@
 import { after } from 'next/server'
 import { createAnonClient } from '@/lib/supabase/client'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
+import { RATE_LIMITS } from '@/lib/config'
 import type { EventType } from '@/lib/supabase/types'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 
 /** UUID v4 format validation */
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -38,6 +40,21 @@ function isValidPayload(body: unknown): body is EventPayload {
 }
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request)
+  const { allowed, retryAfterMs } = checkRateLimit(`events:${ip}`, RATE_LIMITS.events.maxRequests, RATE_LIMITS.events.windowMs)
+  if (!allowed) {
+    return new Response(
+      JSON.stringify({ error: 'Too many requests' }),
+      {
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json',
+          'Retry-After': String(Math.ceil(retryAfterMs / 1000)),
+        },
+      },
+    )
+  }
+
   let body: unknown
   try {
     body = await request.json()

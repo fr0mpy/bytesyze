@@ -1,9 +1,23 @@
 import { NextResponse } from 'next/server'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
+import { RATE_LIMITS, PIPELINE_MAX_DURATION } from '@/lib/config'
 
 export const runtime = 'nodejs'
-export const maxDuration = 300
+export const maxDuration = PIPELINE_MAX_DURATION
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request)
+  const { allowed, retryAfterMs } = checkRateLimit(`pipeline:${ip}`, RATE_LIMITS.pipeline.maxRequests, RATE_LIMITS.pipeline.windowMs)
+  if (!allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests' },
+      {
+        status: 429,
+        headers: { 'Retry-After': String(Math.ceil(retryAfterMs / 1000)) },
+      },
+    )
+  }
+
   const authHeader = request.headers.get('authorization')
   const cronSecret = process.env.CRON_SECRET
 
