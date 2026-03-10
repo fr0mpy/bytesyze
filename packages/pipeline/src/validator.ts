@@ -11,6 +11,7 @@ import {
   MAX_ARTICLE_AGE_MS as MAX_AGE_MS,
   MODELS,
   TIER_1_SOURCES,
+  VALIDATOR_MAX_TOKENS,
 } from './config.js'
 
 /**
@@ -40,7 +41,7 @@ async function aiValidation(
   try {
     const response = await client.messages.create({
       model: MODELS.validator,
-      max_tokens: 100,
+      max_tokens: VALIDATOR_MAX_TOKENS,
       messages: [
         {
           role: 'user',

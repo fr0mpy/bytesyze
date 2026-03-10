@@ -7,7 +7,7 @@
 import { createHash } from 'node:crypto'
 import type { RawArticle } from './types.js'
 import { createPipelineClient } from './supabase.js'
-import { DEFAULT_DEDUP_THRESHOLD, DEDUP_MIN_WORD_LENGTH } from './config.js'
+import { DEFAULT_DEDUP_THRESHOLD, DEDUP_MIN_WORD_LENGTH, HASH_TRUNCATION_LENGTH } from './config.js'
 
 /**
  * Tokenize a string into lowercase word tokens.
@@ -124,7 +124,7 @@ export async function filterExistingArticles(articles: RawArticle[]): Promise<Ra
 
   const supabase = createPipelineClient()
   const hashes = articles.map((a) => {
-    const hash = createHash('sha256').update(a.url).digest('hex').slice(0, 12)
+    const hash = createHash('sha256').update(a.url).digest('hex').slice(0, HASH_TRUNCATION_LENGTH)
     return `sha256-${hash}`
   })
 
@@ -136,7 +136,7 @@ export async function filterExistingArticles(articles: RawArticle[]): Promise<Ra
   const existingSet = new Set((existing ?? []).map((r: { source_hash: string }) => r.source_hash))
 
   const filtered = articles.filter((a) => {
-    const hash = `sha256-${createHash('sha256').update(a.url).digest('hex').slice(0, 12)}`
+    const hash = `sha256-${createHash('sha256').update(a.url).digest('hex').slice(0, HASH_TRUNCATION_LENGTH)}`
     return !existingSet.has(hash)
   })
 

@@ -73,6 +73,9 @@ export const PUSH_SCORE_THRESHOLD = 0.8
 /** Maximum article age in milliseconds (7 days) */
 export const MAX_ARTICLE_AGE_MS = 7 * 24 * 60 * 60 * 1000
 
+/** Maximum tokens for validator LLM response */
+export const VALIDATOR_MAX_TOKENS = 100
+
 /** Minimum description length for article validation */
 export const MIN_DESCRIPTION_LENGTH = 50
 
@@ -109,6 +112,9 @@ export const DEFAULT_WEIGHTS: ScoringWeights = {
 // ==========================================================================
 // Deduplication
 // ==========================================================================
+
+/** Truncation length for SHA-256 hex hashes (e.g. source_hash, source_id) */
+export const HASH_TRUNCATION_LENGTH = 12
 
 /** Default Jaccard similarity threshold for title dedup */
 export const DEFAULT_DEDUP_THRESHOLD = 0.7
@@ -160,6 +166,9 @@ export const FULL_TEXT_SKIP_THRESHOLD = 1_000
 
 /** Minimum extracted text length to be considered valid content */
 export const FULL_TEXT_MIN_CONTENT_LENGTH = 200
+
+/** Minimum fetched text length to be considered non-trivial */
+export const FULL_TEXT_MIN_LENGTH = 100
 
 // ==========================================================================
 // Source Health Tracking

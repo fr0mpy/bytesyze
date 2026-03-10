@@ -10,6 +10,7 @@ import {
   SOURCE_HEALTH_DOWN_THRESHOLD,
   SOURCE_HEALTH_BACKOFF_BASE_MS,
   SOURCE_HEALTH_BACKOFF_MAX_MS,
+  HASH_TRUNCATION_LENGTH,
 } from './config.js'
 
 export interface FetchResult {
@@ -27,7 +28,7 @@ type SourceHealthStatus = 'healthy' | 'degraded' | 'down' | 'disabled'
  * Generate a deterministic source ID from the source name.
  */
 export function generateSourceId(name: string): string {
-  return createHash('sha256').update(name).digest('hex').slice(0, 12)
+  return createHash('sha256').update(name).digest('hex').slice(0, HASH_TRUNCATION_LENGTH)
 }
 
 /**

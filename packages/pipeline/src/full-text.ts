@@ -10,6 +10,7 @@ import {
   FULL_TEXT_BATCH_SIZE,
   FULL_TEXT_SKIP_THRESHOLD,
   FULL_TEXT_MIN_CONTENT_LENGTH,
+  FULL_TEXT_MIN_LENGTH,
   USER_AGENT,
 } from './config.js'
 
@@ -75,7 +76,7 @@ async function fetchFullText(url: string): Promise<string | null> {
     const html = await response.text()
     const text = extractBodyText(html)
 
-    if (text.length < 100) return null
+    if (text.length < FULL_TEXT_MIN_LENGTH) return null
 
     return text.slice(0, FULL_TEXT_MAX_LENGTH)
   } catch {

@@ -20,6 +20,7 @@ import {
   VALID_VISUAL_TYPES,
   CATEGORY_KEYWORDS,
   MOCK_MIN_SENTENCE_LENGTH,
+  HASH_TRUNCATION_LENGTH,
 } from './config.js'
 
 const SYSTEM_PROMPT = `You are a news summarizer for bytesyze.ai, an AI news app for non-technical readers.
@@ -178,7 +179,7 @@ function mockSummarize(article: RawArticle): Omit<ProcessedArticle, 'sourceUrl' 
  * Generate a deterministic hash for an article URL.
  */
 export function generateSourceHash(url: string): string {
-  return `sha256-${createHash('sha256').update(url).digest('hex').slice(0, 12)}`
+  return `sha256-${createHash('sha256').update(url).digest('hex').slice(0, HASH_TRUNCATION_LENGTH)}`
 }
 
 /**
