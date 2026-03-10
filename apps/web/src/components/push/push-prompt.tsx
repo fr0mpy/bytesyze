@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { isPushSupported, getPermissionState, subscribeToPush } from '@/lib/push'
 import { PUSH_PROMPT_DELAY_MS } from '@/lib/config'
+import { isPushSupported, getPermissionState, subscribeToPush } from '@/lib/push'
 import { PushPromptStyles as S } from './styles'
 
 export function PushPrompt() {

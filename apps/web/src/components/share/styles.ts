@@ -6,8 +6,8 @@ export const ShareButtonStyles = {
     'bg-blue-600 text-white',
     'hover:bg-blue-700 active:bg-blue-800',
     'transition-colors duration-150',
-    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-    'dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-offset-zinc-900',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
+    'dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus-visible:ring-offset-zinc-900',
   ].join(' '),
   icon: 'h-4 w-4',
 } as const

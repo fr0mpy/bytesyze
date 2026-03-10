@@ -21,7 +21,7 @@ export default function CardError({
     <div role="alert" className={S.container}>
       <h2 className={S.heading}>{t(errorKeys.title)}</h2>
       <p className={S.description}>{t(errorKeys.description)}</p>
-      <button onClick={reset} className={S.button}>
+      <button type="button" onClick={reset} className={S.button}>
         {t(errorKeys.tryAgain)}
       </button>
     </div>

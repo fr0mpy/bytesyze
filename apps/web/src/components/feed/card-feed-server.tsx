@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
 import { getCards } from '@/lib/data/cards'
+import type { CardCategory } from '@/lib/supabase/types'
 import { CardFeed } from './card-feed'
 import { CategoryFilter } from './category-filter'
-import type { CardCategory } from '@/lib/supabase/types'
 
 interface CardFeedServerProps {
   category?: CardCategory

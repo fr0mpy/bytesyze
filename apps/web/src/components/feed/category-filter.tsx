@@ -1,9 +1,10 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
-import { CategoryFilterStyles as S } from './category-filter-styles'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Routes } from '@/lib/routes'
 import type { CardCategory } from '@/lib/supabase/types'
+import { CategoryFilterStyles as S } from './category-filter-styles'
 
 const CATEGORIES: CardCategory[] = [
   'OpenAI', 'Anthropic', 'Google', 'Meta', 'Open Source',
@@ -29,9 +30,9 @@ export function CategoryFilter({ activeCategory }: CategoryFilterProps) {
       }
 
       const query = params.toString()
-      router.push(query ? `/?${query}` : '/')
+      router.push(query ? `${Routes.home}?${query}` : Routes.home)
     },
-    [router, searchParams]
+    [router, searchParams],
   )
 
   return (

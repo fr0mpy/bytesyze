@@ -8,10 +8,10 @@
  */
 export function isPushSupported(): boolean {
   return (
-    typeof window !== 'undefined' &&
-    'serviceWorker' in navigator &&
-    'PushManager' in window &&
-    'Notification' in window
+    typeof window !== 'undefined'
+    && 'serviceWorker' in navigator
+    && 'PushManager' in window
+    && 'Notification' in window
   )
 }
 
@@ -42,15 +42,12 @@ export async function subscribeToPush(): Promise<boolean> {
 
     const registration = await navigator.serviceWorker.ready
 
-    // Check for existing subscription
-    let subscription = await registration.pushManager.getSubscription()
-
-    if (!subscription) {
-      subscription = await registration.pushManager.subscribe({
+    // Check for existing subscription, or create new one
+    const subscription = await registration.pushManager.getSubscription()
+      ?? await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(vapidKey).buffer as ArrayBuffer,
       })
-    }
 
     // Send subscription to our API
     const response = await fetch('/api/push/subscribe', {

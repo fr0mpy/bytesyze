@@ -7,8 +7,8 @@ export const FlagButtonStyles = {
     'hover:text-red-600 dark:hover:text-red-400',
     'hover:bg-zinc-100 dark:hover:bg-zinc-800',
     'transition-colors duration-150',
-    'focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2',
-    'dark:focus:ring-offset-zinc-900',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2',
+    'dark:focus-visible:ring-offset-zinc-900',
   ].join(' '),
   buttonFlagged: [
     'inline-flex items-center gap-1.5',

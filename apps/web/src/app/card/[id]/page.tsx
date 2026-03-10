@@ -3,6 +3,7 @@ import { NewsCard } from '@/components/card'
 import { FlagButton } from '@/components/flag'
 import { ShareButton } from '@/components/share'
 import { getCardById } from '@/lib/data/cards'
+import { CardDetailPageStyles as S } from './styles'
 
 export default async function CardPage({
   params,
@@ -19,9 +20,9 @@ export default async function CardPage({
   const { card } = result
 
   return (
-    <main className="flex flex-col items-center p-4">
+    <main className={S.main}>
       <NewsCard card={card} expanded />
-      <div className="mt-4 flex w-full max-w-lg items-center justify-between">
+      <div className={S.actions}>
         <ShareButton
           card={{ id: card.id, title: card.title, teaser: card.teaser }}
         />

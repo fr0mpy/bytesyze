@@ -1,8 +1,8 @@
+import { Inter } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages, getTranslations } from '@bytesyze/i18n'
-import { Inter } from 'next/font/google'
-
 import { PushPrompt } from '@/components/push/push-prompt'
+import { LayoutStyles } from './layout-styles'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
@@ -52,7 +52,7 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-dvh bg-background font-sans text-foreground antialiased">
+      <body className={LayoutStyles.body}>
         <NextIntlClientProvider messages={messages}>
           {children}
           <PushPrompt />

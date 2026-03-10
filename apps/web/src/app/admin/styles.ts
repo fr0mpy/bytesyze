@@ -18,13 +18,13 @@ export const AdminLayoutStyles = {
   authInput: [
     'mb-4 w-full rounded-md border border-gray-300',
     'px-3 py-2 text-sm',
-    'focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+    'focus-visible:border-blue-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500',
   ].join(' '),
   authButton: [
     'w-full rounded-md bg-blue-600 px-4 py-2',
     'text-sm font-medium text-white',
     'hover:bg-blue-700',
-    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
   ].join(' '),
   authError: 'mb-4 text-sm text-red-600',
 } as const
@@ -52,7 +52,7 @@ export const AdminDashboardStyles = {
     'inline-flex items-center rounded-md bg-blue-600',
     'px-4 py-2 text-sm font-medium text-white',
     'hover:bg-blue-700',
-    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
   ].join(' '),
 } as const
 
@@ -104,7 +104,7 @@ export const AdminErrorStyles = {
     'rounded-md bg-blue-600 px-4 py-2',
     'text-sm font-medium text-white',
     'hover:bg-blue-700',
-    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
   ].join(' '),
 } as const
 

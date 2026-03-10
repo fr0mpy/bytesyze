@@ -13,7 +13,7 @@ export default function AdminFlaggedError({
     <div className={S.container} role="alert">
       <h2 className={S.heading}>Something went wrong</h2>
       <p className={S.message}>{error.message}</p>
-      <button onClick={reset} className={S.button}>
+      <button type="button" onClick={reset} className={S.button}>
         Try again
       </button>
     </div>

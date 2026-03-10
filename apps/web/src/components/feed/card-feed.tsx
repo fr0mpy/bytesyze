@@ -90,8 +90,8 @@ export function CardFeed({ initialCards, initialNextCursor: _initialNextCursor }
 
                   {cardItem.key_points.length > 0 && (
                     <ul className={S.keyPointsList}>
-                      {cardItem.key_points.map((point, i) => (
-                        <li key={i} className={S.keyPointsItem}>
+                      {cardItem.key_points.map((point) => (
+                        <li key={point} className={S.keyPointsItem}>
                           <span className={S.keyPointsBullet} aria-hidden="true" />
                           <span>{point}</span>
                         </li>
