@@ -32,13 +32,21 @@ export const AdminLayoutStyles = {
 export const AdminDashboardStyles = {
   container: 'space-y-8',
   sectionTitle: 'text-lg font-semibold text-gray-900',
-  statsGrid: 'grid grid-cols-1 gap-4 sm:grid-cols-3',
+  statsGrid: 'grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-4',
   statCard: [
     'rounded-lg border border-gray-200 bg-white',
     'p-6 shadow-sm',
   ].join(' '),
   statLabel: 'text-sm font-medium text-gray-500',
   statValue: 'mt-1 text-3xl font-bold text-gray-900',
+  tableWrapper: 'overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm',
+  table: 'min-w-full divide-y divide-gray-200',
+  tableHeader: [
+    'px-4 py-3 text-left text-xs font-medium',
+    'uppercase tracking-wider text-gray-500',
+  ].join(' '),
+  tableRow: 'border-b border-gray-100 last:border-0',
+  tableCell: 'whitespace-nowrap px-4 py-3 text-sm text-gray-700',
   linkSection: 'mt-8',
   link: [
     'inline-flex items-center rounded-md bg-blue-600',
@@ -48,6 +56,17 @@ export const AdminDashboardStyles = {
   ].join(' '),
 } as const
 
+const STATUS_BADGE_BASE = 'inline-flex rounded-full px-2 py-0.5 text-xs font-medium'
+const STATUS_BADGE_MAP: Record<string, string> = {
+  healthy: `${STATUS_BADGE_BASE} bg-green-100 text-green-700`,
+  degraded: `${STATUS_BADGE_BASE} bg-yellow-100 text-yellow-700`,
+  down: `${STATUS_BADGE_BASE} bg-red-100 text-red-700`,
+}
+
+export function getStatusBadgeClass(status: string): string {
+  return STATUS_BADGE_MAP[status] ?? `${STATUS_BADGE_BASE} bg-gray-100 text-gray-700`
+}
+
 export const AdminFlaggedStyles = {
   container: 'space-y-4',
   title: 'text-lg font-semibold text-gray-900',
@@ -56,6 +75,18 @@ export const AdminFlaggedStyles = {
     'p-12 text-center',
   ].join(' '),
   emptyText: 'text-sm text-gray-500',
+  cardList: 'space-y-3',
+  card: [
+    'rounded-lg border border-gray-200 bg-white',
+    'p-4 shadow-sm',
+  ].join(' '),
+  cardHeader: 'flex items-start justify-between gap-3',
+  cardTitle: 'text-sm font-medium text-gray-900',
+  flagBadge: [
+    'inline-flex shrink-0 rounded-full bg-red-100',
+    'px-2 py-0.5 text-xs font-medium text-red-700',
+  ].join(' '),
+  cardMeta: 'mt-2 flex gap-3 text-xs text-gray-500',
   backLink: [
     'inline-flex items-center text-sm font-medium',
     'text-blue-600 hover:text-blue-800',

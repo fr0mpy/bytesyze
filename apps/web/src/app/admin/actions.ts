@@ -1,10 +1,10 @@
 'use server'
 
 import { cookies } from 'next/headers'
+import { ADMIN_COOKIE_MAX_AGE } from '@/lib/config'
 
 const ADMIN_COOKIE_NAME = 'admin_authenticated'
 const ADMIN_COOKIE_VALUE = 'true'
-const COOKIE_MAX_AGE = 60 * 60 * 24 // 24 hours
 
 export async function authenticateAdmin(
   _prevState: { error: string } | null,
@@ -26,7 +26,7 @@ export async function authenticateAdmin(
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge: COOKIE_MAX_AGE,
+    maxAge: ADMIN_COOKIE_MAX_AGE,
     path: '/admin',
   })
 
